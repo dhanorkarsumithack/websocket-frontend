@@ -21,6 +21,13 @@ export class AppComponent {
             console.log("received message at app ", this.data);
         }
     });
+
+    this.broadcast.msgBroadCast2.subscribe((data) => {
+      if (data) {
+          this.data = data;
+          console.log("received message2 at app ", this.data);
+      }
+  });
 }
 
 

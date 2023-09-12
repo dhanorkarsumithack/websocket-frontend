@@ -11,7 +11,8 @@ import { BroadCastService } from './broad-cast.service';
   })
   export class WebsocketService {
     private stompClient: any;
-    private topic = '/queue';
+    private topic1 = '/queue';
+    private topic2='/topic';
   
     constructor(private broadcast: BroadCastService) {
       this.connect();
@@ -25,8 +26,12 @@ import { BroadCastService } from './broad-cast.service';
       this.stompClient.connect(
         {},
         function (frame: any) {
-          _this.stompClient.subscribe(_this.topic, function (data: any) {
-            _this.onMessageReceived(data);
+          _this.stompClient.subscribe(_this.topic1, function (data: any) {
+            _this.onMessageReceived1(data);
+          });
+
+          _this.stompClient.subscribe(_this.topic2, function (data: any) {
+            _this.onMessageReceived2(data);
           });
         },
         (error: any) => {
@@ -39,10 +44,15 @@ import { BroadCastService } from './broad-cast.service';
       );
     }
   
-    onMessageReceived(message: any) {
+    onMessageReceived1(message: any) {
       const data = JSON.parse(message.body);
       this.broadcast.setData(data);
     }
+
+    onMessageReceived2(message: any) {
+        const data = JSON.parse(message.body);
+        this.broadcast.setData2(data);
+      }
   
     getWsData(message: any) {
       this.stompClient.send('/app/send-data', {}, JSON.stringify(message));
